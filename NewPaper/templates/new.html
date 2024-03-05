@@ -1,0 +1,31 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+{% block title %}
+Post
+{% endblock title %}
+{% block content %}
+<h1>Статья: </h1>
+<hr>
+{% if post %}
+<table>
+<h3>{{ time_now|date:'M d Y' }}</h3>
+
+<tr>
+<td>Заголовок</td>
+<td>Текст</td>
+<td>Дата создания</td>
+</tr>
+
+<tr>
+
+<td>{{ post.title }}</td>
+<td>{{ post.text|censor }}</td>
+<td>{{ post.dateCreation|date:'d M Y' }}</td>
+</tr>
+
+</table>
+{% else %}
+<h2>Статьи нет!</h2>
+{% endif %}
+{% endblock content %}
