@@ -47,7 +47,8 @@ class PostDelete(DeleteView):
     success_url = reverse_lazy('post_list')
 
 
-class PostCreatee(PermissionRequiredMixin, CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
+    raise_exception = True
     permission_required = ('news.create_post',)
     form_class = PostForm
     model = Post
@@ -62,7 +63,7 @@ class PostUpdate(PermissionRequiredMixin, UpdateView):
 
 
 
-class UsersUpdate(LoginRequiredMixin, UpdateView):
+class UsersUpdate(PermissionRequiredMixin, UpdateView):
     form_class = UsersForm
     model = User
     template_name = 'user_edit.html'
