@@ -1,11 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
 from .filters import PostFilter
 from .forms import PostForm, UsersForm
-from .models import Post, Author
+from .models import Post, Author, Category
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
@@ -72,4 +74,27 @@ class UsersUpdate(PermissionRequiredMixin, UpdateView):
     def get_object(self, **kwargs):
         return self.request.user
 
+class CategoriesListView(Post, ListView):
+    model = Post
+    template_name = 'news/category_list.html'
+    context_object_name = 'category_news_list'
 
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(category=self.category).order_by('-created_at')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context ['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        context ['category'] = self.category
+        return context
+
+@login_required()
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
+
+    message = 'Вы успешно подписались на рассылку новостей в категории'
+    return render(request, 'new/subscribe.html', {'category': category, 'message': message})
