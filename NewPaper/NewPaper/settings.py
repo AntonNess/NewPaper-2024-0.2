@@ -164,8 +164,8 @@ SITE_URL ='http://127.0.0.1:8000'
 
 SERVER_EMAIL = "example@yandex.ru"
 MANAGERS = (
-    ('Ivan', 'ivan@yandex.ru'),
-    ('Petr', 'petr@yandex.ru'),
+    ('Ivan', 'anton_gaw@mail.ru'),
+    ('Petr', 'golovatyy91@vk.com'),
 )
 
 ADMINS = (
